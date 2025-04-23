@@ -49,7 +49,11 @@ end
 local function ToggleLock()
     QuickCallDB.locked = not QuickCallDB.locked
     UpdateLockButton()
-    DEFAULT_CHAT_FRAME:AddMessage("Lock toggled: " .. tostring(QuickCallDB.locked), 0.8, 0.8, 1.0)
+    if QuickCallDB.locked then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000Position locked!|r")
+    else
+        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cff00ff00Position unlocked!|r")
+    end
 end
 
 -- Layout constants
@@ -165,7 +169,7 @@ local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("PLAYER_LOGIN")
 eventFrame:SetScript("OnEvent", function()
     UpdateLockButton()
-	DEFAULT_CHAT_FRAME:AddMessage("QuickCall: Lock/Unlock button loaded.")
+	DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cff00ff00addon loaded.|r")
 end)
 
 -- Keybinding functions
@@ -209,4 +213,4 @@ SlashCmdList["QUICKCALL"] = function()
     end
 end
 
-QuickCallFrame:Show()
+QuickCallFrame:Hide()
