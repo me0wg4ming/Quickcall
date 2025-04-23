@@ -3,7 +3,7 @@
 ## Notes: Quick calling buttons for Arathi Basin
 ## Version: 1.1
 ## Author: me0wg4ming
-## SavedVariablesPerCharacter: MyAddonDB
+## SavedVariablesPerCharacter: QuickCallDB
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## Category: PvP
