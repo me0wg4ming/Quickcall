@@ -169,10 +169,14 @@ eventFrame:SetScript("OnEvent", function()
 end)
 
 -- Keybinding functions
+-- Set up keybindings CALL_1 through CALL_8 with closure fix
 for i = 1, 8 do
-    setglobal("CALL_" .. i, function() HandleCall(i) end)
+    local idx = i
+    setglobal("CALL_" .. idx, function() HandleCall(idx) end)
 end
-setglobal("CALL_CLEAR", HandleClear)
+
+-- Add the CALL_CLEAR binding
+setglobal("CALL_CLEAR", function() HandleClear() end)
 
 
 
