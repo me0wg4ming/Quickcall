@@ -141,7 +141,9 @@ for i = 1, 8 do
     local x = framePaddingX + col * (buttonWidth + spacing)
     local y = -30 - row * (buttonHeight + spacing)
     btn:SetPoint("TOPLEFT", QuickCallFrame, "TOPLEFT", x, y)
-    btn:SetScript("OnClick", function() HandleCall(i) end)
+    btn:SetScript("OnClick", (function(index)
+    return function() HandleCall(index) end
+end)(i))
 end
 
 -- CLEAR button
