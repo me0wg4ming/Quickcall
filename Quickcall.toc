@@ -2,6 +2,9 @@
 ## Title: QuickCall
 ## Notes: Quick calling buttons for Arathi Basin
 ## Version: 1.1
-
-Bindings.xml
+## Author: me0wg4ming
+## SavedVariables: QuickCallDB
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## Category: PvP
 Quickcall.lua

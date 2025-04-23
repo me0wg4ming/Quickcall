@@ -1,11 +1,11 @@
 <Bindings>
   <Binding name="Report 1 Incoming" header="QUICKCALL">CALL_1()</Binding>
-  <Binding name="Report 2 Incoming" header="QUICKCALL">CALL_2()</Binding>
-  <Binding name="Report 3 Incoming" header="QUICKCALL">CALL_3()</Binding>
-  <Binding name="Report 4 Incoming" header="QUICKCALL">CALL_4()</Binding>
-  <Binding name="Report 5 Incoming" header="QUICKCALL">CALL_5()</Binding>
-  <Binding name="Report 6 Incoming" header="QUICKCALL">CALL_6()</Binding>
-  <Binding name="Report 7 Incoming" header="QUICKCALL">CALL_7()</Binding>
-  <Binding name="Report 8 Incoming" header="QUICKCALL">CALL_8()</Binding>
-  <Binding name="Report Base Clear" header="QUICKCALL">CALL_CLEAR()</Binding>
+  <Binding name="Report 2 Incoming">CALL_2()</Binding>
+  <Binding name="Report 3 Incoming">CALL_3()</Binding>
+  <Binding name="Report 4 Incoming">CALL_4()</Binding>
+  <Binding name="Report 5 Incoming">CALL_5()</Binding>
+  <Binding name="Report 6 Incoming">CALL_6()</Binding>
+  <Binding name="Report 7 Incoming">CALL_7()</Binding>
+  <Binding name="Report 8 Incoming">CALL_8()</Binding>
+  <Binding name="Report Base Clear">CALL_CLEAR()</Binding>
 </Bindings>
