@@ -53,7 +53,7 @@ local function ToggleLock()
 end
 
 -- Layout constants
-local buttonWidth = 22
+local buttonWidth = 25
 local buttonHeight = 26
 local spacing = 10
 local buttonsPerRow = 4
