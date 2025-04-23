@@ -123,7 +123,7 @@ local function HandleClear()
         local zoneText = GetMinimapZoneText() or "Unknown"
         if baseNames[zoneText] then lastKnownBase = zoneText end
         local locationToCall = lastKnownBase or zoneText
-        SendChatMessage("CLEAR at " .. locationToCall, "BATTLEGROUND")
+        SendChatMessage(locationToCall..  "CLEAR", "BATTLEGROUND")
     end)
 end
 
