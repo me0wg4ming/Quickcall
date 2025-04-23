@@ -16,7 +16,7 @@ QuickCallDB.locked = QuickCallDB.locked ~= false -- default true
 QuickCallDB.posX = QuickCallDB.posX or 400
 QuickCallDB.posY = QuickCallDB.posY or 300
 
--- Custom mod for Lua 5.0
+-- Custom mod
 local function mod(a, b)
     return a - math.floor(a / b) * b
 end
@@ -87,7 +87,7 @@ QuickCallFrame:SetBackdrop({
     edgeSize = 16,
     insets = { left = 4, right = 4, top = 4, bottom = 4 }
 })
-QuickCallFrame:SetBackdropColor(1, 1, 1, 0.85)
+QuickCallFrame:SetBackdropColor(1, 1, 1, 0.90)
 
 -- Title
 local title = QuickCallFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -123,7 +123,7 @@ local function HandleClear()
         local zoneText = GetMinimapZoneText() or "Unknown"
         if baseNames[zoneText] then lastKnownBase = zoneText end
         local locationToCall = lastKnownBase or zoneText
-        SendChatMessage(locationToCall..  "CLEAR", "BATTLEGROUND")
+        SendChatMessage(locationToCall.." CLEAR", "BATTLEGROUND")
     end)
 end
 
