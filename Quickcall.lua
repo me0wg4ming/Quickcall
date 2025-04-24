@@ -127,7 +127,7 @@ clearBtn:SetScript("OnClick", function()
 end)
 
 -- Lock toggle button for frame dragging
-lockBtn = CreateFrame("Button", "QuickCallLockToggle", QuickCallFrame, "UIPanelButtonTemplate")
+local lockBtn = CreateFrame("Button", "QuickCallLockToggle", QuickCallFrame, "UIPanelButtonTemplate")
 lockBtn:SetWidth(60)
 lockBtn:SetHeight(20)
 lockBtn:SetText("Lock")
