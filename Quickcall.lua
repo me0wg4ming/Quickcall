@@ -89,9 +89,10 @@ QuickCallFrame:SetBackdropColor(1, 1, 1, 0.90)
 
 -- Title text
 local title = QuickCallFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-title:SetPoint("TOP", QuickCallFrame, "TOP", 0, -10)
+title:SetPoint("TOP", QuickCallFrame, "TOP", 0, -12)
 title:SetText("Call Battleground Enemies")
 title:SetTextColor(1, 1, 0)
+title:SetFont("Fonts\\FRIZQT__.TTF", 10.5)
 
 -- Create 8 number buttons for calling enemy counts
 local framePaddingX = (frameW - totalW) / 2
