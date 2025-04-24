@@ -107,7 +107,7 @@ local function NotInAB(callback)
         callback()
         return
     end
-    DEFAULT_CHAT_FRAME:AddMessage("You are not in Arathi Basin.", 1, 0, 0)
+    DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not in Arathi Basin.|r")
 end
 
 -- Shared action handlers
