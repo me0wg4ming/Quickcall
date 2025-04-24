@@ -4,7 +4,7 @@ This Addon even supports Keybindings so you can decide if you want to do the cal
 
 ![ScreenShot](https://i.ibb.co/35jCKPxm/436549581-866e6d75-2476-4d66-a0a8-e40c6ead6f73.png})
 
-![ScreenShot]([https://i.ibb.co/k2cp8vVW/436546341-41db66a4-cc0f-4efb-b5ec-73eef0ee26be.png})
+![ScreenShot](https://i.ibb.co/k2cp8vVW/436546341-41db66a4-cc0f-4efb-b5ec-73eef0ee26be.png})
 
 The addon automatically shows when entering Arathi Basin.
 You can also manually make it shown with the command "/Quickcall" or "/qc"
