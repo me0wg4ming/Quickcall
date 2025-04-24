@@ -90,7 +90,7 @@ QuickCallFrame:SetBackdropColor(1, 1, 1, 0.90)
 -- Title text
 local title = QuickCallFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 title:SetPoint("TOP", QuickCallFrame, "TOP", 0, -10)
-title:SetText("Call Battleground Enemys")
+title:SetText("Call Battleground Enemies")
 title:SetTextColor(1, 1, 0)
 
 -- Create 8 number buttons for calling enemy counts
