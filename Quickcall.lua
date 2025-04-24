@@ -151,12 +151,16 @@ end)
 
 -- Create callable keybinds for 1–8 and CLEAR
 for i = 1, 8 do
-    setglobal("CALL_" .. i, function()
-        NotInAB(function()
-            SendChatMessage((i == 8 and "8 or more at " or i .. " at ") .. GetCallLocation(), "BATTLEGROUND")
-        end)
-    end)
+    setglobal("CALL_" .. i, (function(index)
+        return function()
+            NotInAB(function()
+                SendChatMessage((index == 8 and "8 or more at " or index .. " at ") .. GetCallLocation(), "BATTLEGROUND")
+            end)
+        end
+    end)(i))
 end
+
+
 setglobal("CALL_CLEAR", function()
     NotInAB(function()
         SendChatMessage(GetCallLocation() .. " CLEAR", "BATTLEGROUND")
