@@ -1,233 +1,339 @@
 -- QuickCall Header for the Bindings
 BINDING_HEADER_QUICKCALL = "Quick Call"
 
--- Valid AB base locations
-local baseNames = {
-    ["Farm"] = true,
-    ["Stables"] = true,
-    ["Lumber Mill"] = true,
-    ["Blacksmith"] = true,
-    ["Gold Mine"] = true,
-}
-
 -- SavedVariables setup
 if not QuickCallDB then QuickCallDB = {} end
-QuickCallDB.locked = QuickCallDB.locked ~= false -- default true
-QuickCallDB.posX = QuickCallDB.posX or 400
-QuickCallDB.posY = QuickCallDB.posY or 300
-
--- Custom mod
-local function mod(a, b)
-    return a - math.floor(a / b) * b
-end
+QuickCallDB.locked_AB = QuickCallDB.locked_AB ~= false -- default true
+QuickCallDB.posX_AB = QuickCallDB.posX_AB or 400
+QuickCallDB.posY_AB = QuickCallDB.posY_AB or 300
+QuickCallDB.locked_WSG = QuickCallDB.locked_WSG ~= false
+QuickCallDB.posX_WSG = QuickCallDB.posX_WSG or 400
+QuickCallDB.posY_WSG = QuickCallDB.posY_WSG or 300
 
 -- Clamp helper
-local function ClampToScreen(x, y)
+local function ClampToScreen(x, y, frameWidth, frameHeight)
     local screenW = UIParent:GetWidth()
     local screenH = UIParent:GetHeight()
-
-    x = math.max(0, math.min(x or 0, screenW - 220))
-    y = math.max(0, math.min(y or 0, screenH - 160))
-
+    x = math.max(0, math.min(x or 0, screenW - (frameWidth or 220)))
+    y = math.max(0, math.min(y or 0, screenH - (frameHeight or 160)))
     return x, y
 end
 
-local function SaveFramePosition()
-    local _, _, _, x, y = QuickCallFrame:GetPoint()
-    x, y = ClampToScreen(x, y)
-    QuickCallDB.posX = x
-    QuickCallDB.posY = y
-end
-
-local function UpdateLockButton()
-    QuickCallFrame:EnableMouse(not QuickCallDB.locked)
-    if lockBtn then
-        lockBtn:SetText(QuickCallDB.locked and "Unlock" or "Lock")
-    end
-end
-
-local function ToggleLock()
-    QuickCallDB.locked = not QuickCallDB.locked
-    UpdateLockButton()
-    if QuickCallDB.locked then
-        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000Position locked!|r")
+-- Toggle lock
+local function ToggleLock(frame, isAB)
+    if isAB then
+        QuickCallDB.locked_AB = not QuickCallDB.locked_AB
+        frame:EnableMouse(not QuickCallDB.locked_AB)
+        local lockBtn = _G[frame:GetName().."LockToggle"]
+        if lockBtn then
+            lockBtn:SetText(QuickCallDB.locked_AB and "Unlock" or "Lock")
+        end
+        if QuickCallDB.locked_AB then
+            DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall Arathi:|r |cffff0000Position locked!|r")
+        else
+            DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall Arathi:|r |cff00ff00Position unlocked!|r")
+        end
     else
-        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cff00ff00Position unlocked!|r")
+        QuickCallDB.locked_WSG = not QuickCallDB.locked_WSG
+        frame:EnableMouse(not QuickCallDB.locked_WSG)
+        local lockBtn = _G[frame:GetName().."LockToggle"]
+        if lockBtn then
+            lockBtn:SetText(QuickCallDB.locked_WSG and "Unlock" or "Lock")
+        end
+        if QuickCallDB.locked_WSG then
+            DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall Warsong:|r |cffff0000Position locked!|r")
+        else
+            DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall Warsong:|r |cff00ff00Position unlocked!|r")
+        end
     end
 end
 
--- Layout constants
-local buttonWidth = 25
-local buttonHeight = 26
-local spacing = 10
-local buttonsPerRow = 4
-local totalWidth = buttonsPerRow * buttonWidth + (buttonsPerRow - 1) * spacing
-local frameWidth = totalWidth + 40
-local frameHeight = 3 * buttonHeight + 3 * spacing + 70
+-- ==================== Arathi Basin Frame ====================
+local buttonWidth_AB = 25
+local buttonHeight_AB = 26
+local spacing_AB = 10
+local buttonsPerRow_AB = 4
 
--- Create main frame
-local QuickCallFrame = CreateFrame("Frame", "QuickCallFrame", UIParent)
-QuickCallFrame:SetClampedToScreen(true)
-QuickCallFrame:SetWidth(frameWidth)
-QuickCallFrame:SetHeight(frameHeight)
+local QuickCallFrameAB = CreateFrame("Frame", "QuickCallFrameAB", UIParent)
+QuickCallFrameAB:SetClampedToScreen(true)
+local totalWidth_AB = buttonsPerRow_AB * buttonWidth_AB + (buttonsPerRow_AB-1) * spacing_AB
+QuickCallFrameAB:SetWidth(totalWidth_AB + 40)
+QuickCallFrameAB:SetHeight(3 * buttonHeight_AB + 3*spacing_AB + 70)
+QuickCallFrameAB:EnableMouse(not QuickCallDB.locked_AB)
 
-local x, y = ClampToScreen(QuickCallDB.posX, QuickCallDB.posY)
-QuickCallFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x, y)
+QuickCallFrameAB:SetBackdrop({bgFile="Interface\\AddOns\\QuickCall\\Quickcall.tga", edgeFile="Interface/Tooltips/UI-Tooltip-Border", tile=false, edgeSize=16, insets={left=4,right=4,top=4,bottom=4}})
+QuickCallFrameAB:SetBackdropColor(1,1,1,0.9)
 
-QuickCallFrame:SetMovable(true)
-QuickCallFrame:RegisterForDrag("LeftButton")
-QuickCallFrame:SetScript("OnDragStart", function()
-    if not QuickCallDB.locked then QuickCallFrame:StartMoving() end
+local x, y = ClampToScreen(QuickCallDB.posX_AB, QuickCallDB.posY_AB, QuickCallFrameAB:GetWidth(), QuickCallFrameAB:GetHeight())
+QuickCallFrameAB:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x, y)
+QuickCallFrameAB:SetMovable(true)
+QuickCallFrameAB:RegisterForDrag("LeftButton")
+QuickCallFrameAB:SetScript("OnDragStart", function()
+    if not QuickCallDB.locked_AB then QuickCallFrameAB:StartMoving() end
 end)
-QuickCallFrame:SetScript("OnDragStop", function()
-    QuickCallFrame:StopMovingOrSizing()
-    SaveFramePosition()
+QuickCallFrameAB:SetScript("OnDragStop", function()
+    QuickCallFrameAB:StopMovingOrSizing()
+    local _, _, _, x, y = QuickCallFrameAB:GetPoint()
+    x, y = ClampToScreen(x, y, QuickCallFrameAB:GetWidth(), QuickCallFrameAB:GetHeight())
+    QuickCallDB.posX_AB = x
+    QuickCallDB.posY_AB = y
 end)
 
-QuickCallFrame:SetBackdrop({
-    bgFile = "Interface\\AddOns\\QuickCall\\Quickcall.tga",
-    edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
-    tile = false,
-    edgeSize = 16,
-    insets = { left = 4, right = 4, top = 4, bottom = 4 }
-})
-QuickCallFrame:SetBackdropColor(1, 1, 1, 0.90)
+local titleAB = QuickCallFrameAB:CreateFontString(nil,"OVERLAY","GameFontNormal")
+titleAB:SetPoint("TOP", QuickCallFrameAB,"TOP",0,-12)
+titleAB:SetText("Call Arathi Basin Enemies")
+titleAB:SetTextColor(1,1,0)
+titleAB:SetFont("Fonts\\ARIALN.TTF",13, "OUTLINE")
 
--- Title text
-local title = QuickCallFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-title:SetPoint("TOP", QuickCallFrame, "TOP", 0, -12)
-title:SetText("Call Battleground Enemies")
-title:SetTextColor(1, 1, 0)
-title:SetFont("Fonts\\FRIZQT__.TTF", 10.5)
+local baseNames = {["Farm"]=true, ["Stables"]=true, ["Lumber Mill"]=true, ["Blacksmith"]=true, ["Gold Mine"]=true}
+local lastKnownBase = nil
 
--- Shared zone check logic
-local function NotInAB(callback)
+local function HandleCallAB(index)
     local zone = GetRealZoneText()
     local base = GetMinimapZoneText()
-    if zone == "Arathi Basin" or baseNames[base] then
-        callback()
-        return
+    if zone=="Arathi Basin" and baseNames[base] then
+        lastKnownBase = base
     end
-    DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not in Arathi Basin!|r")
+    if lastKnownBase and baseNames[lastKnownBase] then
+        local msg = (index==8 and "8 or more at " or index.." at ")..lastKnownBase
+        SendChatMessage(msg,"BATTLEGROUND")
+    else
+        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not at a valid base in Arathi Basin!|r")
+    end
 end
 
--- Shared action handlers
-local lastKnownBase = nil
-local function HandleCall(index)
-    NotInAB(function()
-        local minimapZone = GetMinimapZoneText() or ""
-        local realZone = GetRealZoneText() or ""
-
-        if realZone == "Arathi Basin" and baseNames[minimapZone] then
-            lastKnownBase = minimapZone
-        end
-
-        if lastKnownBase and baseNames[lastKnownBase] then
-            local msg = (index == 8 and "8 or more at " or index .. " at ") .. lastKnownBase
-            SendChatMessage(msg, "BATTLEGROUND")
-			else
-			DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not at a valid base in Arathi Basin!|r")
-        end
-    end)
+local function HandleClearAB()
+    local zone = GetRealZoneText() or ""
+    local base = GetMinimapZoneText() or ""
+    if zone=="Arathi Basin" and baseNames[base] then
+        lastKnownBase = base
+    end
+    if lastKnownBase and baseNames[lastKnownBase] then
+        SendChatMessage(lastKnownBase.." CLEAR","BATTLEGROUND")
+    else
+        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not at a valid base in Arathi Basin!|r")
+    end
 end
 
-local function HandleClear()
-    NotInAB(function()
-        local minimapZone = GetMinimapZoneText() or ""
-        local realZone = GetRealZoneText() or ""
-
-        if realZone == "Arathi Basin" and baseNames[minimapZone] then
-            lastKnownBase = minimapZone
-        end
-
-        if lastKnownBase and baseNames[lastKnownBase] then
-            SendChatMessage(lastKnownBase .. " CLEAR", "BATTLEGROUND")
-			else
-			DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not at a valid base in Arathi Basin!|r")
-        end
-    end)
+-- AB buttons
+local framePaddingX_AB = 20
+for i=1,8 do
+    local btn = CreateFrame("Button", QuickCallFrameAB:GetName().."Button"..i, QuickCallFrameAB,"UIPanelButtonTemplate")
+    btn:SetWidth(buttonWidth_AB)
+    btn:SetHeight(buttonHeight_AB)
+    btn:SetText(i==8 and "8+" or tostring(i))
+    local fs = _G[btn:GetName().."Text"]
+    fs:SetFont("Fonts\\ARIALN.TTF",11, "OUTLINE")
+    
+    local row = math.floor((i-1)/buttonsPerRow_AB)
+    local col = (i-1) - row*buttonsPerRow_AB
+    local x = framePaddingX_AB + col*(buttonWidth_AB+spacing_AB)
+    local y = -30 - row*(buttonHeight_AB+spacing_AB)
+    btn:SetPoint("TOPLEFT", QuickCallFrameAB, "TOPLEFT", x, y)
+    btn:SetScript("OnClick", (function(idx) return function() HandleCallAB(idx) end end)(i))
 end
 
--- Buttons 1–8
-local framePaddingX = (frameWidth - totalWidth) / 2
-for i = 1, 8 do
-    local btn = CreateFrame("Button", "QuickCallButton"..i, QuickCallFrame, "UIPanelButtonTemplate")
-    btn:SetWidth(buttonWidth)
-    btn:SetHeight(buttonHeight)
-    btn:SetText(i == 8 and "8+" or tostring(i))
-    btn:GetFontString():SetPoint("LEFT", 4, 0)
-    btn:GetFontString():SetPoint("RIGHT", -4, 0)
-    local row = math.floor((i - 1) / buttonsPerRow)
-    local col = mod(i - 1, buttonsPerRow)
-    local x = framePaddingX + col * (buttonWidth + spacing)
-    local y = -30 - row * (buttonHeight + spacing)
-    btn:SetPoint("TOPLEFT", QuickCallFrame, "TOPLEFT", x, y)
-    btn:SetScript("OnClick", (function(index)
-    return function() HandleCall(index) end
-end)(i))
-end
-
--- CLEAR button
-local clearBtn = CreateFrame("Button", "QuickCallClear", QuickCallFrame, "UIPanelButtonTemplate")
-clearBtn:SetWidth(totalWidth)
-clearBtn:SetHeight(buttonHeight)
+-- CLEAR Button
+local clearBtn = CreateFrame("Button",QuickCallFrameAB:GetName().."Clear",QuickCallFrameAB,"UIPanelButtonTemplate")
+clearBtn:SetWidth(totalWidth_AB)
+clearBtn:SetHeight(buttonHeight_AB)
 clearBtn:SetText("BASE CLEAR")
-clearBtn:SetPoint("TOP", QuickCallFrame, "TOP", 0, -2 * (buttonHeight + spacing) - 40)
-clearBtn:SetScript("OnClick", HandleClear)
+clearBtn:SetPoint("TOP",QuickCallFrameAB,"TOP",0,-2*(buttonHeight_AB+spacing_AB)-40)
+clearBtn:SetScript("OnClick",HandleClearAB)
+local fs = _G[clearBtn:GetName().."Text"]
+fs:SetFont("Fonts\\ARIALN.TTF", 13, "OUTLINE")
 
--- Lock/unlock toggle button
-lockBtn = CreateFrame("Button", "QuickCallLockToggle", QuickCallFrame, "UIPanelButtonTemplate")
-lockBtn:SetWidth(60)
-lockBtn:SetHeight(20)
-lockBtn:SetText("Lock")
-lockBtn:SetPoint("BOTTOM", QuickCallFrame, "BOTTOM", 0, 8)
-lockBtn:SetScript("OnClick", ToggleLock)
-local eventFrame = CreateFrame("Frame")
-eventFrame:RegisterEvent("PLAYER_LOGIN")
-eventFrame:SetScript("OnEvent", function()
-    UpdateLockButton()
-	DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cff00ff00addon loaded.|r")
+-- Lock Button AB
+local lockBtnAB = CreateFrame("Button",QuickCallFrameAB:GetName().."LockToggle",QuickCallFrameAB,"UIPanelButtonTemplate")
+lockBtnAB:SetWidth(60)
+lockBtnAB:SetHeight(20)
+lockBtnAB:SetText(QuickCallDB.locked_AB and "Unlock" or "Lock")
+lockBtnAB:SetPoint("BOTTOM",QuickCallFrameAB,"BOTTOM",0,8)
+lockBtnAB:SetScript("OnClick",function() ToggleLock(QuickCallFrameAB,true) end)
+lockBtnAB:SetFont("Fonts\\ARIALN.TTF",13, "OUTLINE")
+
+-- Keybindings AB
+for i=1,8 do
+    setglobal("CALL_"..i,function() HandleCallAB(i) end)
+end
+setglobal("CALL_CLEAR",HandleClearAB)
+
+QuickCallFrameAB:Hide()
+
+--==================== WSG Frame ====================
+local wsgTexts = {
+    "efc fr",
+    "efc balcony",
+    "efc tunnel",
+    "efc gy",
+    "efc roof",
+    "efc ramp",
+    "efc west",
+    "efc mid",
+    "efc east",
+    "efc efr",
+    "efc ebalcony",
+    "efc etunnel",
+    "efc egy",
+    "efc eroof",
+    "efc eramp"
+}
+
+local wsgChatTexts = {
+    "Enemy flag carrier is in our flag room",
+    "Enemy flag carrier is on our balcony",
+    "Enemy flag carrier is in our tunnel",
+    "Enemy flag carrier is at our graveyard",
+    "Enemy flag carrier is on our roof",
+    "Enemy flag carrier is at our ramp",
+    "Enemy flag carrier is at our west",
+    "Enemy flag carrier is at our mid",
+    "Enemy flag carrier is at our east",
+    "Enemy flag carrier at enemy flag room",
+    "Enemy flag carrier at enemy balcony",
+    "Enemy flag carrier at enemy tunnel",
+    "Enemy flag carrier at enemy graveyard",
+    "Enemy flag carrier in enemy roof",
+    "Enemy flag carrier at enemy ramp"
+}
+
+local buttonWidth_WSG = 65
+local buttonHeight_WSG = 26
+local spacing_WSG = 5
+local wsgButtonsPerRow = 3
+local totalWSGWidth = wsgButtonsPerRow*buttonWidth_WSG + (wsgButtonsPerRow-1)*spacing_WSG + 20
+local totalWSGHeight = 2*buttonHeight_WSG + 2*spacing_WSG + 150
+
+local QuickCallFrameWSG = CreateFrame("Frame","QuickCallFrameWSG",UIParent)
+QuickCallFrameWSG:SetClampedToScreen(true)
+QuickCallFrameWSG:SetWidth(totalWSGWidth)
+QuickCallFrameWSG:SetHeight(totalWSGHeight)
+QuickCallFrameWSG:EnableMouse(not QuickCallDB.locked_WSG)
+
+QuickCallFrameWSG:SetBackdrop({bgFile="Interface\\AddOns\\QuickCall\\Quickcall.tga", edgeFile="Interface/Tooltips/UI-Tooltip-Border", tile=false, edgeSize=16, insets={left=4,right=4,top=4,bottom=4}})
+QuickCallFrameWSG:SetBackdropColor(1,1,1,0.9)
+
+local x, y = ClampToScreen(QuickCallDB.posX_WSG, QuickCallDB.posY_WSG, QuickCallFrameWSG:GetWidth(), QuickCallFrameWSG:GetHeight())
+QuickCallFrameWSG:SetPoint("BOTTOMLEFT",UIParent,"BOTTOMLEFT",x,y)
+QuickCallFrameWSG:SetMovable(true)
+QuickCallFrameWSG:RegisterForDrag("LeftButton")
+QuickCallFrameWSG:SetScript("OnDragStart",function()
+    if not QuickCallDB.locked_WSG then QuickCallFrameWSG:StartMoving() end
+end)
+QuickCallFrameWSG:SetScript("OnDragStop",function()
+    QuickCallFrameWSG:StopMovingOrSizing()
+    local _, _, _, x, y = QuickCallFrameWSG:GetPoint()
+    x, y = ClampToScreen(x, y, QuickCallFrameWSG:GetWidth(), QuickCallFrameWSG:GetHeight())
+    QuickCallDB.posX_WSG = x
+    QuickCallDB.posY_WSG = y
 end)
 
--- Keybinding functions
--- Set up keybindings CALL_1 through CALL_8 with closure fix
-for i = 1, 8 do
-    local idx = i
-    setglobal("CALL_" .. idx, function() HandleCall(idx) end)
+local titleWSG = QuickCallFrameWSG:CreateFontString(nil,"OVERLAY","GameFontNormal")
+titleWSG:SetPoint("TOP",QuickCallFrameWSG,"TOP",0,-12)
+titleWSG:SetText("Call enemy Flag Carrier")
+titleWSG:SetTextColor(1,1,0)
+titleWSG:SetFont("Fonts\\ARIALN.TTF",15, "OUTLINE")
+
+--==================== WSG Buttons ====================
+local framePaddingX_WSG = 20
+local row = 0
+local currentRowCount = 0
+local rowButtonsVisible = {}
+
+for i=1, table.getn(wsgTexts) do
+    local btn = CreateFrame("Button", QuickCallFrameWSG:GetName().."Button"..i, QuickCallFrameWSG, "UIPanelButtonTemplate")
+    btn:SetWidth(buttonWidth_WSG)
+    btn:SetHeight(buttonHeight_WSG)
+    if wsgTexts[i] ~= "" then
+        btn:SetText(wsgTexts[i])
+        local fs = _G[btn:GetName().."Text"]
+        fs:SetFont("Fonts\\ARIALN.TTF",10.5, "OUTLINE")
+        -- Farben
+        if i <=6 then fs:SetTextColor(0,1,0) -- grün
+        elseif i <=9 then fs:SetTextColor(0.4,0.6,1) -- hellblau
+        else fs:SetTextColor(1,1,0) end -- gelb
+        btn:SetScript("OnClick", (function(idx) return function() 
+            if GetRealZoneText() ~= "Warsong Gulch" then
+                DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not in Warsong Gulch!|r")
+            else
+                SendChatMessage(wsgChatTexts[idx],"BATTLEGROUND")
+            end
+        end end)(i))
+        table.insert(rowButtonsVisible, btn)
+    else
+        btn:Hide()
+    end
+    currentRowCount = currentRowCount +1
+    if currentRowCount >= wsgButtonsPerRow then
+        -- Reihe zentrieren
+        local totalWidth = table.getn(rowButtonsVisible)*buttonWidth_WSG + (table.getn(rowButtonsVisible)-1)*spacing_WSG
+        for j=1,table.getn(rowButtonsVisible) do
+            local x = (QuickCallFrameWSG:GetWidth()-totalWidth)/2 + (j-1)*(buttonWidth_WSG+spacing_WSG)
+            local y = -30 - row*(buttonHeight_WSG+spacing_WSG)
+            rowButtonsVisible[j]:SetPoint("TOPLEFT", QuickCallFrameWSG, "TOPLEFT", x, y)
+        end
+        row = row +1
+        currentRowCount = 0
+        rowButtonsVisible = {}
+    end
+end
+-- letzte Reihe zentrieren
+if table.getn(rowButtonsVisible) >0 then
+    local totalWidth = table.getn(rowButtonsVisible)*buttonWidth_WSG + (table.getn(rowButtonsVisible)-1)*spacing_WSG
+    for j=1,table.getn(rowButtonsVisible) do
+        local x = (QuickCallFrameWSG:GetWidth()-totalWidth)/2 + (j-1)*(buttonWidth_WSG+spacing_WSG)
+        local y = -30 - row*(buttonHeight_WSG+spacing_WSG)
+        rowButtonsVisible[j]:SetPoint("TOPLEFT", QuickCallFrameWSG, "TOPLEFT", x, y)
+    end
 end
 
--- Add the CALL_CLEAR binding
-setglobal("CALL_CLEAR", function() HandleClear() end)
+-- Lock button WSG
+local lockBtnWSG = CreateFrame("Button",QuickCallFrameWSG:GetName().."LockToggle",QuickCallFrameWSG,"UIPanelButtonTemplate")
+lockBtnWSG:SetWidth(60)
+lockBtnWSG:SetHeight(20)
+lockBtnWSG:SetText(QuickCallDB.locked_WSG and "Unlock" or "Lock")
+lockBtnWSG:SetPoint("BOTTOM",QuickCallFrameWSG,"BOTTOM",0,8)
+lockBtnWSG:SetScript("OnClick",function() ToggleLock(QuickCallFrameWSG,false) end)
+lockBtnWSG:SetFont("Fonts\\ARIALN.TTF",10, "OUTLINE")
 
+QuickCallFrameWSG:Hide()
 
-
---Show/hide in Arathi Basin
+-- ==================== Visibility handler ====================
 local function UpdateVisibility()
     local zoneName = GetRealZoneText()
-    if zoneName == "Arathi Basin" then
-        QuickCallFrame:Show()
-    else
-        QuickCallFrame:Hide()
+    QuickCallFrameAB:Hide()
+    QuickCallFrameWSG:Hide()
+    if zoneName=="Arathi Basin" then
+        QuickCallFrameAB:Show()
+    elseif zoneName=="Warsong Gulch" then
+        QuickCallFrameWSG:Show()
     end
 end
 
---Event handling (no more lock logic here — handled above)
-local eventFrame = CreateFrame("Frame")
-eventFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-eventFrame:SetScript("OnEvent", function()
-    UpdateVisibility()
-end)
+local visEventFrame = CreateFrame("Frame")
+visEventFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+visEventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+visEventFrame:SetScript("OnEvent",UpdateVisibility)
 
--- Slash command
-SLASH_QUICKCALL1 = "/quickcall"
-SLASH_QUICKCALL2 = "/qc"
+-- ==================== Slash Commands ====================
+SLASH_QUICKCALL1 = "/qca"
 SlashCmdList["QUICKCALL"] = function()
-    if QuickCallFrame:IsShown() then
-        QuickCallFrame:Hide()
-    else
-        QuickCallFrame:Show()
-    end
+    if QuickCallFrameAB:IsShown() then QuickCallFrameAB:Hide() else QuickCallFrameAB:Show() end
 end
 
-QuickCallFrame:Hide()
+SLASH_QUICKCALLWSG1 = "/qcw"
+SlashCmdList["QUICKCALLWSG"] = function()
+    if QuickCallFrameWSG:IsShown() then QuickCallFrameWSG:Hide() else QuickCallFrameWSG:Show() end
+end
+
+SLASH_QUICKCALLALL1 = "/qc"
+SlashCmdList["QUICKCALLALL"] = function()
+    local anyShown = QuickCallFrameAB:IsShown() or QuickCallFrameWSG:IsShown()
+    if anyShown then
+        QuickCallFrameAB:Hide()
+        QuickCallFrameWSG:Hide()
+    else
+        QuickCallFrameAB:Show()
+        QuickCallFrameWSG:Show()
+    end
+end
