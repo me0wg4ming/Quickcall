@@ -96,7 +96,7 @@ local function HandleCallAB(index)
     end
     if lastKnownBase and baseNames[lastKnownBase] then
         local msg = (index==8 and "8 or more at " or index.." at ")..lastKnownBase
-        SendChatMessage(msg,"SAY")
+        SendChatMessage(msg,"BATTLEGROUND")
     else
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not at a valid base in Arathi Basin!|r")
     end
@@ -109,7 +109,7 @@ local function HandleClearAB()
         lastKnownBase = base
     end
     if lastKnownBase and baseNames[lastKnownBase] then
-        SendChatMessage(lastKnownBase.." CLEAR","SAY")
+        SendChatMessage(lastKnownBase.." CLEAR","BATTLEGROUND")
     else
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not at a valid base in Arathi Basin!|r")
     end
