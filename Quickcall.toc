@@ -1,7 +1,7 @@
 ## Interface: 11200
 ## Title: QuickCall
 ## Notes: Quick calling buttons for Arathi Basin
-## Version: 1.3
+## Version: 1.5
 ## Author: me0wg4ming
 ## SavedVariablesPerCharacter: QuickCallDB
 ## DefaultState: Enabled
