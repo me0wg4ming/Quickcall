@@ -11,7 +11,7 @@ This Addon even supports Keybindings so you can decide if you want to do the cal
 
 
 The addon automatically shows when entering Arathi Basin.
-You can also manually make both frames shown with the command "/Quickcall" or "/qc"
+You can also manually make both frames shown with the command "/quickcall" or "/qc"
 /qca - Will only show Arathi Basin frame.
 /qcw - Will only show Warsong frame.
 
