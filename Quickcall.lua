@@ -327,6 +327,7 @@ SlashCmdList["QUICKCALLWSG"] = function()
 end
 
 SLASH_QUICKCALLALL1 = "/qc"
+SLASH_QUICKCALLALL2 = "/quickcall"
 SlashCmdList["QUICKCALLALL"] = function()
     local anyShown = QuickCallFrameAB:IsShown() or QuickCallFrameWSG:IsShown()
     if anyShown then
