@@ -96,7 +96,7 @@ local function HandleCallAB(index)
     end
     if lastKnownBase and baseNames[lastKnownBase] then
         local msg = (index==8 and "8 or more at " or index.." at ")..lastKnownBase
-        SendChatMessage(msg,"BATTLEGROUND")
+        SendChatMessage(msg,"SAY")
     else
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not at a valid base in Arathi Basin!|r")
     end
@@ -109,7 +109,7 @@ local function HandleClearAB()
         lastKnownBase = base
     end
     if lastKnownBase and baseNames[lastKnownBase] then
-        SendChatMessage(lastKnownBase.." CLEAR","BATTLEGROUND")
+        SendChatMessage(lastKnownBase.." CLEAR","SAY")
     else
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not at a valid base in Arathi Basin!|r")
     end
@@ -154,9 +154,10 @@ lockBtnAB:SetFont("Fonts\\ARIALN.TTF",13, "OUTLINE")
 
 -- Keybindings AB
 for i=1,8 do
-    setglobal("CALL_"..i,function() HandleCallAB(i) end)
+    local idx = i
+    setglobal("CALL_"..i, function() HandleCallAB(idx) end)
 end
-setglobal("CALL_CLEAR",HandleClearAB)
+setglobal("CALL_CLEAR", HandleClearAB)
 
 QuickCallFrameAB:Hide()
 
@@ -327,7 +328,6 @@ SlashCmdList["QUICKCALLWSG"] = function()
 end
 
 SLASH_QUICKCALLALL1 = "/qc"
-SLASH_QUICKCALLALL2 = "/quickcall"
 SlashCmdList["QUICKCALLALL"] = function()
     local anyShown = QuickCallFrameAB:IsShown() or QuickCallFrameWSG:IsShown()
     if anyShown then
