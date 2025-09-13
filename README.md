@@ -8,7 +8,7 @@ This Addon even supports Keybindings so you can decide if you want to do the cal
 <img width="786" height="402" alt="grafik" src="https://github.com/user-attachments/assets/c824de9d-65e2-4794-afdf-8202c4276f59" />
 
 
-The addon automatically shows when entering Arathi Basin.
+The addon automatically shows when entering Arathi Basin or Warsong.
 
 You can also manually make both frames shown with the command "/quickcall" or "/qc"
 
