@@ -88,7 +88,7 @@ titleAB:SetText("Call Arathi Basin Enemies")
 titleAB:SetTextColor(1,1,0)
 titleAB:SetFont("Fonts\\ARIALN.TTF",13, "OUTLINE")
 
--- Für die Validierung
+-- For validation
 local baseNames = {
     ["Farm"]        = true,
     ["Stables"]     = true,
@@ -281,7 +281,7 @@ for i=1, table.getn(wsgTexts) do
         btn:SetText(wsgTexts[i])
         local fs = _G[btn:GetName().."Text"]
         fs:SetFont("Fonts\\ARIALN.TTF",10.5, "OUTLINE")
-        -- Farben
+        -- Colors
         if i <=6 then fs:SetTextColor(0,1,0) -- grün
         elseif i <=9 then fs:SetTextColor(0.4,0.6,1) -- hellblau
         else fs:SetTextColor(1,1,0) end -- gelb
@@ -298,7 +298,7 @@ for i=1, table.getn(wsgTexts) do
     end
     currentRowCount = currentRowCount +1
     if currentRowCount >= wsgButtonsPerRow then
-        -- Reihe zentrieren
+        -- Center row
         local totalWidth = table.getn(rowButtonsVisible)*buttonWidth_WSG + (table.getn(rowButtonsVisible)-1)*spacing_WSG
         for j=1,table.getn(rowButtonsVisible) do
             local x = (QuickCallFrameWSG:GetWidth()-totalWidth)/2 + (j-1)*(buttonWidth_WSG+spacing_WSG)
@@ -310,7 +310,7 @@ for i=1, table.getn(wsgTexts) do
         rowButtonsVisible = {}
     end
 end
--- letzte Reihe zentrieren
+-- Center last row
 if table.getn(rowButtonsVisible) >0 then
     local totalWidth = table.getn(rowButtonsVisible)*buttonWidth_WSG + (table.getn(rowButtonsVisible)-1)*spacing_WSG
     for j=1,table.getn(rowButtonsVisible) do
