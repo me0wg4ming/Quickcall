@@ -10,6 +10,9 @@ QuickCallDB.locked_WSG = QuickCallDB.locked_WSG ~= false
 QuickCallDB.posX_WSG = QuickCallDB.posX_WSG or 400
 QuickCallDB.posY_WSG = QuickCallDB.posY_WSG or 300
 
+-- Toggle for long or short calls
+QuickCallDB.useShortNames = QuickCallDB.useShortNames ~= false
+
 -- Clamp helper
 local function ClampToScreen(x, y, frameWidth, frameHeight)
     local screenW = UIParent:GetWidth()
@@ -85,17 +88,40 @@ titleAB:SetText("Call Arathi Basin Enemies")
 titleAB:SetTextColor(1,1,0)
 titleAB:SetFont("Fonts\\ARIALN.TTF",13, "OUTLINE")
 
-local baseNames = {["Farm"]=true, ["Stables"]=true, ["Lumber Mill"]=true, ["Blacksmith"]=true, ["Gold Mine"]=true}
+-- Für die Validierung
+local baseNames = {
+    ["Farm"]        = true,
+    ["Stables"]     = true,
+    ["Lumber Mill"] = true,
+    ["Blacksmith"]  = true,
+    ["Gold Mine"]   = true
+}
+
+-- Short names of bases
+local baseShortNames = {
+    ["Lumber Mill"] = "LM",
+    ["Blacksmith"]  = "BS",
+    ["Gold Mine"]   = "GM",
+    ["Farm"]        = "FM",
+    ["Stables"]     = "ST"
+}
+
 local lastKnownBase = nil
 
 local function HandleCallAB(index)
     local zone = GetRealZoneText()
     local base = GetMinimapZoneText()
-    if zone=="Arathi Basin" and baseNames[base] then
+    if zone == "Arathi Basin" and baseNames[base] then
         lastKnownBase = base
     end
     if lastKnownBase and baseNames[lastKnownBase] then
-        local msg = (index==8 and "8 or more at " or index.." at ")..lastKnownBase
+        local baseName
+        if QuickCallDB.useShortNames then
+            baseName = baseShortNames[lastKnownBase] or lastKnownBase
+        else
+            baseName = lastKnownBase
+        end
+        local msg = (index==8 and "8 or more at " or index.." at ")..baseName
         SendChatMessage(msg,"BATTLEGROUND")
     else
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not at a valid base in Arathi Basin!|r")
@@ -109,7 +135,13 @@ local function HandleClearAB()
         lastKnownBase = base
     end
     if lastKnownBase and baseNames[lastKnownBase] then
-        SendChatMessage(lastKnownBase.." CLEAR","BATTLEGROUND")
+        local baseName
+        if QuickCallDB.useShortNames then
+            baseName = baseShortNames[lastKnownBase] or lastKnownBase
+        else
+            baseName = lastKnownBase
+        end
+        SendChatMessage(baseName.." CLEAR","BATTLEGROUND")
     else
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not at a valid base in Arathi Basin!|r")
     end
@@ -337,4 +369,16 @@ SlashCmdList["QUICKCALLALL"] = function()
         QuickCallFrameAB:Show()
         QuickCallFrameWSG:Show()
     end
+end
+
+SLASH_QCSHORT1 = "/qcshort"
+SlashCmdList["QCSHORT"] = function()
+    QuickCallDB.useShortNames = true
+    DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r Using |cff00ff00SHORT|r base names (LM, BS, GM, FM, ST).")
+end
+
+SLASH_QCLONG1 = "/qclong"
+SlashCmdList["QCLONG"] = function()
+    QuickCallDB.useShortNames = false
+    DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r Using |cffffff00LONG|r base names (Lumber Mill, Blacksmith, Gold Mine, Farm, Stables).")
 end
