@@ -19,7 +19,7 @@ You can also manually make both frames shown with the command "/quickcall" or "/
 
 /qcw - Will only show Warsong frame.
 
-Added a command to toggle long and short calls
+Added a new command to toggle long or short calls
 
 /qclong = "Lumber mill" "Blacksmith" "Gold Mine" "Stables" "Farm"
 
