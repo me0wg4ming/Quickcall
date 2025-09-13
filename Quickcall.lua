@@ -111,40 +111,60 @@ local lastKnownBase = nil
 local function HandleCallAB(index)
     local zone = GetRealZoneText()
     local base = GetMinimapZoneText()
-    if zone == "Arathi Basin" and baseNames[base] then
+
+    if zone ~= "Arathi Basin" then
+        lastKnownBase = nil
+        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not in Arathi Basin!|r")
+        return
+    end
+
+    if baseNames[base] then
         lastKnownBase = base
     end
-    if lastKnownBase and baseNames[lastKnownBase] then
-        local baseName
-        if QuickCallDB.useShortNames then
-            baseName = baseShortNames[lastKnownBase] or lastKnownBase
-        else
-            baseName = lastKnownBase
-        end
-        local msg = (index==8 and "8 or more at " or index.." at ")..baseName
-        SendChatMessage(msg,"BATTLEGROUND")
-    else
-        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not at a valid base in Arathi Basin!|r")
+
+    if not lastKnownBase then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000No valid base known yet!|r")
+        return
     end
+
+    local baseName
+    if QuickCallDB.useShortNames then
+        baseName = baseShortNames[lastKnownBase] or lastKnownBase
+    else
+        baseName = lastKnownBase
+    end
+
+    local msg = (index == 8 and "8 or more at " or index.." at ") .. baseName
+    SendChatMessage(msg, "BATTLEGROUND")
 end
 
 local function HandleClearAB()
-    local zone = GetRealZoneText() or ""
-    local base = GetMinimapZoneText() or ""
-    if zone=="Arathi Basin" and baseNames[base] then
+    local zone = GetRealZoneText()
+    local base = GetMinimapZoneText()
+
+    if zone ~= "Arathi Basin" then
+        lastKnownBase = nil
+        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not in Arathi Basin!|r")
+        return
+    end
+
+    if baseNames[base] then
         lastKnownBase = base
     end
-    if lastKnownBase and baseNames[lastKnownBase] then
-        local baseName
-        if QuickCallDB.useShortNames then
-            baseName = baseShortNames[lastKnownBase] or lastKnownBase
-        else
-            baseName = lastKnownBase
-        end
-        SendChatMessage(baseName.." CLEAR","BATTLEGROUND")
-    else
-        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not at a valid base in Arathi Basin!|r")
+
+    if not lastKnownBase then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000No valid base known yet!|r")
+        return
     end
+
+    local baseName
+    if QuickCallDB.useShortNames then
+        baseName = baseShortNames[lastKnownBase] or lastKnownBase
+    else
+        baseName = lastKnownBase
+    end
+
+    SendChatMessage(baseName .. " CLEAR", "BATTLEGROUND")
 end
 
 -- AB buttons
