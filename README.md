@@ -12,12 +12,17 @@ This Addon even supports Keybindings so you can decide if you want to do the cal
 
 
 The addon automatically shows when entering Arathi Basin.
+
 You can also manually make both frames shown with the command "/quickcall" or "/qc"
+
 /qca - Will only show Arathi Basin frame.
+
 /qcw - Will only show Warsong frame.
 
 Added a command to toggle long and short calls
+
 /qclong = "Lumber mill" "Blacksmith" "Gold Mine" "Stables" "Farm"
+
 /qcshort = "LM" "BS" "GM" "ST" "FM"
 
 <img width="289" height="279" alt="grafik" src="https://github.com/user-attachments/assets/7abd23ed-164c-4edd-ae2f-5405b4c18d19" />
