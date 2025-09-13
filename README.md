@@ -1,4 +1,4 @@
-# Quickcall
+# Quickcall v1.7
 With this addon you can call numbers in Arathi Basin for incomings and the enemy flag carrier position in Warsong Gulch.
 This Addon is designed for Vanilla wow 1.12.1 on Turtle WoW.
 This Addon even supports Keybindings so you can decide if you want to do the calls by pressing the UI buttons or by pressing a keybind on your keyyboard.
@@ -15,5 +15,9 @@ The addon automatically shows when entering Arathi Basin.
 You can also manually make both frames shown with the command "/quickcall" or "/qc"
 /qca - Will only show Arathi Basin frame.
 /qcw - Will only show Warsong frame.
+
+Added a command to toggle long and short calls
+/qclong = "Lumber mill" "Blacksmith" "Gold Mine" "Stables" "Farm"
+/qcshort = "LM" "BS" "GM" "ST" "FM"
 
 <img width="289" height="279" alt="grafik" src="https://github.com/user-attachments/assets/7abd23ed-164c-4edd-ae2f-5405b4c18d19" />
