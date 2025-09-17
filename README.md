@@ -1,4 +1,4 @@
-# Quickcall v1.7
+# Quickcall v2.0
 With this addon you can call numbers in Arathi Basin for incomings and the enemy flag carrier position in Warsong Gulch.
 This Addon is designed for Vanilla wow 1.12.1 on Turtle WoW.
 This Addon even supports Keybindings so you can decide if you want to do the calls by pressing the UI buttons or by pressing a keybind on your keyyboard.
