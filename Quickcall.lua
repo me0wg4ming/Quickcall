@@ -108,62 +108,49 @@ local baseShortNames = {
 
 local lastKnownBase = nil
 
-local function HandleCallAB(index)
+-- ==================== Update lastKnownBase dynamically ====================
+local function UpdateLastKnownBaseDynamic()
     local zone = GetRealZoneText()
     local base = GetMinimapZoneText()
+    if zone == "Arathi Basin" and baseNames[base] then
+        lastKnownBase = base
+    end
+end
 
-    if zone ~= "Arathi Basin" then
+local function HandleCallAB(index)
+    if GetRealZoneText() ~= "Arathi Basin" then
         lastKnownBase = nil
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not in Arathi Basin!|r")
         return
     end
 
-    if baseNames[base] then
-        lastKnownBase = base
-    end
+    UpdateLastKnownBaseDynamic()
 
     if not lastKnownBase then
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000No valid base known yet!|r")
         return
     end
 
-    local baseName
-    if QuickCallDB.useShortNames then
-        baseName = baseShortNames[lastKnownBase] or lastKnownBase
-    else
-        baseName = lastKnownBase
-    end
-
+    local baseName = QuickCallDB.useShortNames and (baseShortNames[lastKnownBase] or lastKnownBase) or lastKnownBase
     local msg = (index == 8 and "8 or more at " or index.." at ") .. baseName
     SendChatMessage(msg, "BATTLEGROUND")
 end
 
 local function HandleClearAB()
-    local zone = GetRealZoneText()
-    local base = GetMinimapZoneText()
-
-    if zone ~= "Arathi Basin" then
+    if GetRealZoneText() ~= "Arathi Basin" then
         lastKnownBase = nil
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not in Arathi Basin!|r")
         return
     end
 
-    if baseNames[base] then
-        lastKnownBase = base
-    end
+    UpdateLastKnownBaseDynamic()
 
     if not lastKnownBase then
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000No valid base known yet!|r")
         return
     end
 
-    local baseName
-    if QuickCallDB.useShortNames then
-        baseName = baseShortNames[lastKnownBase] or lastKnownBase
-    else
-        baseName = lastKnownBase
-    end
-
+    local baseName = QuickCallDB.useShortNames and (baseShortNames[lastKnownBase] or lastKnownBase) or lastKnownBase
     SendChatMessage(baseName .. " CLEAR", "BATTLEGROUND")
 end
 
@@ -301,10 +288,9 @@ for i=1, table.getn(wsgTexts) do
         btn:SetText(wsgTexts[i])
         local fs = _G[btn:GetName().."Text"]
         fs:SetFont("Fonts\\ARIALN.TTF",10.5, "OUTLINE")
-        -- Colors
-        if i <=6 then fs:SetTextColor(0,1,0) -- grün
-        elseif i <=9 then fs:SetTextColor(0.4,0.6,1) -- hellblau
-        else fs:SetTextColor(1,1,0) end -- gelb
+        if i <=6 then fs:SetTextColor(0,1,0)
+        elseif i <=9 then fs:SetTextColor(0.4,0.6,1)
+        else fs:SetTextColor(1,1,0) end
         btn:SetScript("OnClick", (function(idx) return function() 
             if GetRealZoneText() ~= "Warsong Gulch" then
                 DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not in Warsong Gulch!|r")
@@ -318,7 +304,6 @@ for i=1, table.getn(wsgTexts) do
     end
     currentRowCount = currentRowCount +1
     if currentRowCount >= wsgButtonsPerRow then
-        -- Center row
         local totalWidth = table.getn(rowButtonsVisible)*buttonWidth_WSG + (table.getn(rowButtonsVisible)-1)*spacing_WSG
         for j=1,table.getn(rowButtonsVisible) do
             local x = (QuickCallFrameWSG:GetWidth()-totalWidth)/2 + (j-1)*(buttonWidth_WSG+spacing_WSG)
@@ -330,7 +315,6 @@ for i=1, table.getn(wsgTexts) do
         rowButtonsVisible = {}
     end
 end
--- Center last row
 if table.getn(rowButtonsVisible) >0 then
     local totalWidth = table.getn(rowButtonsVisible)*buttonWidth_WSG + (table.getn(rowButtonsVisible)-1)*spacing_WSG
     for j=1,table.getn(rowButtonsVisible) do
@@ -368,11 +352,10 @@ visEventFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 visEventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 visEventFrame:SetScript("OnEvent",UpdateVisibility)
 
--- ==================== Auto-update lastKnownBase ====================
+-- ==================== Auto-update lastKnownBase on zone events ====================
 local function UpdateLastKnownBase()
     local zone = GetRealZoneText()
     local base = GetMinimapZoneText()
-
     if zone == "Arathi Basin" and baseNames[base] then
         lastKnownBase = base
     end
