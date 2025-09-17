@@ -368,6 +368,22 @@ visEventFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 visEventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 visEventFrame:SetScript("OnEvent",UpdateVisibility)
 
+-- ==================== Auto-update lastKnownBase ====================
+local function UpdateLastKnownBase()
+    local zone = GetRealZoneText()
+    local base = GetMinimapZoneText()
+
+    if zone == "Arathi Basin" and baseNames[base] then
+        lastKnownBase = base
+    end
+end
+
+local baseEventFrame = CreateFrame("Frame")
+baseEventFrame:RegisterEvent("ZONE_CHANGED")
+baseEventFrame:RegisterEvent("ZONE_CHANGED_INDOORS")
+baseEventFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+baseEventFrame:SetScript("OnEvent", UpdateLastKnownBase)
+
 -- ==================== Slash Commands ====================
 SLASH_QUICKCALL1 = "/qca"
 SlashCmdList["QUICKCALL"] = function()
