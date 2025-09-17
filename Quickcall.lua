@@ -233,21 +233,21 @@ local wsgTexts = {
 }
 
 local wsgChatTexts = {
-    "Enemy flag carrier is in our flag room",
-    "Enemy flag carrier is on our balcony",
-    "Enemy flag carrier is in our tunnel",
-    "Enemy flag carrier is at our graveyard",
-    "Enemy flag carrier is on our roof",
-    "Enemy flag carrier is at our ramp",
-    "Enemy flag carrier is west",
-    "Enemy flag carrier is mid",
-    "Enemy flag carrier is east",
-    "Enemy flag carrier is at enemy flag room",
-    "Enemy flag carrier is at enemy balcony",
-    "Enemy flag carrier is at enemy tunnel",
-    "Enemy flag carrier is at enemy graveyard",
-    "Enemy flag carrier is on enemy roof",
-    "Enemy flag carrier is at enemy ramp"
+    "EFC = our flag room",
+    "EFC = our balcony",
+    "EFC = our tunnel",
+    "EFC = our graveyard",
+    "EFC = our roof",
+    "EFC = our ramp",
+    "EFC = west",
+    "EFC = mid",
+    "EFC = east",
+    "EFC = enemy flag room",
+    "EFC = enemy balcony",
+    "EFC = enemy tunnel",
+    "EFC = enemy graveyard",
+    "EFC = enemy roof",
+    "EFC = enemy ramp"
 }
 
 local buttonWidth_WSG = 65
