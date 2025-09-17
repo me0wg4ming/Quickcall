@@ -1,4 +1,9 @@
 # Quickcall v2.0
+
+- Shortened WSG calls
+- Fixed first base anchoring in AB to not be able to be called.
+- Fixed bases not being updated automatically if not called and standing between the old base and a new base with the minimap name "Arathi Basin"
+
 With this addon you can call numbers in Arathi Basin for incomings and the enemy flag carrier position in Warsong Gulch.
 This Addon is designed for Vanilla wow 1.12.1 on Turtle WoW.
 This Addon even supports Keybindings so you can decide if you want to do the calls by pressing the UI buttons or by pressing a keybind on your keyyboard.
