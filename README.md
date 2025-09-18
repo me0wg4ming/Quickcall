@@ -1,7 +1,9 @@
 # Quickcall v2.1
 
 New toggle for Warsong and AB (turning the visual frames off)
+
 /qcwtoggle - toggle warsong frame off for warsong after joining
+
 /qcatoggle - toggle arathi basin frame off (hotkeys will still work)
 
 With this addon you can call numbers in Arathi Basin for incomings and the enemy flag carrier position in Warsong Gulch.
