@@ -10,6 +10,10 @@ QuickCallDB.locked_WSG = QuickCallDB.locked_WSG ~= false
 QuickCallDB.posX_WSG = QuickCallDB.posX_WSG or 400
 QuickCallDB.posY_WSG = QuickCallDB.posY_WSG or 300
 
+-- Enable/disable toggles
+QuickCallDB.enabled_AB  = QuickCallDB.enabled_AB ~= false -- default true
+QuickCallDB.enabled_WSG = QuickCallDB.enabled_WSG ~= false -- default true
+
 -- Toggle for long or short calls
 QuickCallDB.useShortNames = QuickCallDB.useShortNames ~= false
 
@@ -340,9 +344,10 @@ local function UpdateVisibility()
     local zoneName = GetRealZoneText()
     QuickCallFrameAB:Hide()
     QuickCallFrameWSG:Hide()
-    if zoneName=="Arathi Basin" then
+    
+    if zoneName=="Arathi Basin" and QuickCallDB.enabled_AB then
         QuickCallFrameAB:Show()
-    elseif zoneName=="Warsong Gulch" then
+    elseif zoneName=="Warsong Gulch" and QuickCallDB.enabled_WSG then
         QuickCallFrameWSG:Show()
     end
 end
@@ -400,4 +405,29 @@ SLASH_QCLONG1 = "/qclong"
 SlashCmdList["QCLONG"] = function()
     QuickCallDB.useShortNames = false
     DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r Using |cffffff00LONG|r base names (Lumber Mill, Blacksmith, Gold Mine, Farm, Stables).")
+end
+
+-- ==================== Toggle Slash Commands ====================
+SLASH_QCATOGGLE1 = "/qcatoggle"
+SlashCmdList["QCATOGGLE"] = function()
+    QuickCallDB.enabled_AB = not QuickCallDB.enabled_AB
+    if QuickCallDB.enabled_AB then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r Arathi Basin frame |cff00ff00ENABLED|r.")
+        UpdateVisibility()
+    else
+        QuickCallFrameAB:Hide()
+        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r Arathi Basin frame |cffff0000DISABLED|r.")
+    end
+end
+
+SLASH_QCWTOGGLE1 = "/qcwtoggle"
+SlashCmdList["QCWTOGGLE"] = function()
+    QuickCallDB.enabled_WSG = not QuickCallDB.enabled_WSG
+    if QuickCallDB.enabled_WSG then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r Warsong Gulch frame |cff00ff00ENABLED|r.")
+        UpdateVisibility()
+    else
+        QuickCallFrameWSG:Hide()
+        DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r Warsong Gulch frame |cffff0000DISABLED|r.")
+    end
 end
