@@ -1,7 +1,7 @@
 ## Interface: 11200
 ## Title: QuickCall
 ## Notes: Quick calling buttons for Arathi Basin and Warsong Gulch
-## Version: 2.0
+## Version: 2.2
 ## Author: me0wg4ming
 ## SavedVariablesPerCharacter: QuickCallDB
 ## DefaultState: Enabled
