@@ -191,19 +191,19 @@ local wsgTexts = {
 }
 
 local wsgChatTexts = {
-    "EFC = our flag room",
-    "EFC = our tunnel",
-    "EFC = our graveyard",
-    "EFC = banana/roof",
-    "EFC = our ramp",
+    "EFC = ally flag room",
+    "EFC = ally tunnel",
+    "EFC = ally graveyard",
+    "EFC = ally banana/roof",
+    "EFC = ally ramp",
     "EFC = west",
     "EFC = mid",
     "EFC = east",
-    "EFC = enemy flag room",
-    "EFC = enemy tunnel",
-    "EFC = enemy graveyard",
-    "EFC = enemy banana/roof",
-    "EFC = enemy ramp"
+    "EFC = horde flag room",
+    "EFC = horde tunnel",
+    "EFC = horde graveyard",
+    "EFC = horde banana/roof",
+    "EFC = horde ramp"
 }
 
 local QuickCallFrameWSG = CreateFrame("Frame","QuickCallFrameWSG",UIParent)
