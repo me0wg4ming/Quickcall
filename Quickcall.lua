@@ -3,18 +3,14 @@ BINDING_HEADER_QUICKCALL = "Quick Call"
 
 -- SavedVariables setup
 if not QuickCallDB then QuickCallDB = {} end
-QuickCallDB.locked_AB = QuickCallDB.locked_AB ~= false -- default true
+QuickCallDB.locked_AB = QuickCallDB.locked_AB ~= false
 QuickCallDB.posX_AB = QuickCallDB.posX_AB or 400
 QuickCallDB.posY_AB = QuickCallDB.posY_AB or 300
 QuickCallDB.locked_WSG = QuickCallDB.locked_WSG ~= false
 QuickCallDB.posX_WSG = QuickCallDB.posX_WSG or 400
 QuickCallDB.posY_WSG = QuickCallDB.posY_WSG or 300
-
--- Enable/disable toggles
-QuickCallDB.enabled_AB  = QuickCallDB.enabled_AB ~= false -- default true
-QuickCallDB.enabled_WSG = QuickCallDB.enabled_WSG ~= false -- default true
-
--- Toggle for long or short calls
+QuickCallDB.enabled_AB  = QuickCallDB.enabled_AB ~= false
+QuickCallDB.enabled_WSG = QuickCallDB.enabled_WSG ~= false
 QuickCallDB.useShortNames = QuickCallDB.useShortNames ~= false
 
 -- Clamp helper
@@ -67,10 +63,8 @@ local totalWidth_AB = buttonsPerRow_AB * buttonWidth_AB + (buttonsPerRow_AB-1) *
 QuickCallFrameAB:SetWidth(totalWidth_AB + 40)
 QuickCallFrameAB:SetHeight(3 * buttonHeight_AB + 3*spacing_AB + 70)
 QuickCallFrameAB:EnableMouse(not QuickCallDB.locked_AB)
-
 QuickCallFrameAB:SetBackdrop({bgFile="Interface\\AddOns\\QuickCall\\Quickcall.tga", edgeFile="Interface/Tooltips/UI-Tooltip-Border", tile=false, edgeSize=16, insets={left=4,right=4,top=4,bottom=4}})
 QuickCallFrameAB:SetBackdropColor(1,1,1,0.9)
-
 local x, y = ClampToScreen(QuickCallDB.posX_AB, QuickCallDB.posY_AB, QuickCallFrameAB:GetWidth(), QuickCallFrameAB:GetHeight())
 QuickCallFrameAB:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x, y)
 QuickCallFrameAB:SetMovable(true)
@@ -92,27 +86,10 @@ titleAB:SetText("Call Arathi Basin Enemies")
 titleAB:SetTextColor(1,1,0)
 titleAB:SetFont("Fonts\\ARIALN.TTF",13, "OUTLINE")
 
--- For validation
-local baseNames = {
-    ["Farm"]        = true,
-    ["Stables"]     = true,
-    ["Lumber Mill"] = true,
-    ["Blacksmith"]  = true,
-    ["Gold Mine"]   = true
-}
-
--- Short names of bases
-local baseShortNames = {
-    ["Lumber Mill"] = "LM",
-    ["Blacksmith"]  = "BS",
-    ["Gold Mine"]   = "GM",
-    ["Farm"]        = "FM",
-    ["Stables"]     = "ST"
-}
+local baseNames = { ["Farm"]=true, ["Stables"]=true, ["Lumber Mill"]=true, ["Blacksmith"]=true, ["Gold Mine"]=true }
+local baseShortNames = { ["Lumber Mill"]="LM", ["Blacksmith"]="BS", ["Gold Mine"]="GM", ["Farm"]="FM", ["Stables"]="ST" }
 
 local lastKnownBase = nil
-
--- ==================== Update lastKnownBase dynamically ====================
 local function UpdateLastKnownBaseDynamic()
     local zone = GetRealZoneText()
     local base = GetMinimapZoneText()
@@ -127,14 +104,11 @@ local function HandleCallAB(index)
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not in Arathi Basin!|r")
         return
     end
-
     UpdateLastKnownBaseDynamic()
-
     if not lastKnownBase then
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000No valid base known yet!|r")
         return
     end
-
     local baseName = QuickCallDB.useShortNames and (baseShortNames[lastKnownBase] or lastKnownBase) or lastKnownBase
     local msg = (index == 8 and "8 or more at " or index.." at ") .. baseName
     SendChatMessage(msg, "BATTLEGROUND")
@@ -146,14 +120,11 @@ local function HandleClearAB()
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not in Arathi Basin!|r")
         return
     end
-
     UpdateLastKnownBaseDynamic()
-
     if not lastKnownBase then
         DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000No valid base known yet!|r")
         return
     end
-
     local baseName = QuickCallDB.useShortNames and (baseShortNames[lastKnownBase] or lastKnownBase) or lastKnownBase
     SendChatMessage(baseName .. " CLEAR", "BATTLEGROUND")
 end
@@ -176,7 +147,6 @@ for i=1,8 do
     btn:SetScript("OnClick", (function(idx) return function() HandleCallAB(idx) end end)(i))
 end
 
--- CLEAR Button
 local clearBtn = CreateFrame("Button",QuickCallFrameAB:GetName().."Clear",QuickCallFrameAB,"UIPanelButtonTemplate")
 clearBtn:SetWidth(totalWidth_AB)
 clearBtn:SetHeight(buttonHeight_AB)
@@ -186,7 +156,6 @@ clearBtn:SetScript("OnClick",HandleClearAB)
 local fs = _G[clearBtn:GetName().."Text"]
 fs:SetFont("Fonts\\ARIALN.TTF", 13, "OUTLINE")
 
--- Lock Button AB
 local lockBtnAB = CreateFrame("Button",QuickCallFrameAB:GetName().."LockToggle",QuickCallFrameAB,"UIPanelButtonTemplate")
 lockBtnAB:SetWidth(60)
 lockBtnAB:SetHeight(20)
@@ -204,66 +173,56 @@ setglobal("CALL_CLEAR", HandleClearAB)
 
 QuickCallFrameAB:Hide()
 
---==================== WSG Frame ====================
+-- ==================== WSG Frame for WoW 1.12.1 (round Buttons) ====================
 local wsgTexts = {
-    "efc fr",
-    "efc balcony",
-    "efc tunnel",
-    "efc gy",
-    "efc roof",
-    "efc ramp",
-    "efc west",
-    "efc mid",
-    "efc east",
-    "efc efr",
-    "efc ebalcony",
-    "efc etunnel",
-    "efc egy",
-    "efc eroof",
-    "efc eramp"
+    "afr",
+    "atunnel",
+    "agy",
+    "aroof",
+    "aramp",
+    "ewest",
+    "emid",
+    "eeast",
+    "hfr",
+    "htunnel",
+    "hgy",
+    "hroof",
+    "hramp"
 }
 
 local wsgChatTexts = {
     "EFC = our flag room",
-    "EFC = our balcony",
     "EFC = our tunnel",
     "EFC = our graveyard",
-    "EFC = our roof",
+    "EFC = banana/roof",
     "EFC = our ramp",
     "EFC = west",
     "EFC = mid",
     "EFC = east",
     "EFC = enemy flag room",
-    "EFC = enemy balcony",
     "EFC = enemy tunnel",
     "EFC = enemy graveyard",
-    "EFC = enemy roof",
+    "EFC = enemy banana/roof",
     "EFC = enemy ramp"
 }
 
-local buttonWidth_WSG = 65
-local buttonHeight_WSG = 26
-local spacing_WSG = 5
-local wsgButtonsPerRow = 3
-local totalWSGWidth = wsgButtonsPerRow*buttonWidth_WSG + (wsgButtonsPerRow-1)*spacing_WSG + 20
-local totalWSGHeight = 2*buttonHeight_WSG + 2*spacing_WSG + 150
-
 local QuickCallFrameWSG = CreateFrame("Frame","QuickCallFrameWSG",UIParent)
 QuickCallFrameWSG:SetClampedToScreen(true)
-QuickCallFrameWSG:SetWidth(totalWSGWidth)
-QuickCallFrameWSG:SetHeight(totalWSGHeight)
+
+-- Quadratischer Frame
+local frameSize = 230
+QuickCallFrameWSG:SetWidth(frameSize)
+QuickCallFrameWSG:SetHeight(frameSize)
 QuickCallFrameWSG:EnableMouse(not QuickCallDB.locked_WSG)
+QuickCallFrameWSG:SetBackdrop({bgFile="Interface\\AddOns\\QuickCall\\Warsong.tga", edgeFile="Interface/Tooltips/UI-Tooltip-Border", tile=false, edgeSize=16, insets={left=4,right=4,top=4,bottom=4}})
+QuickCallFrameWSG:SetBackdropColor(1, 1, 1, 0.75)
 
-QuickCallFrameWSG:SetBackdrop({bgFile="Interface\\AddOns\\QuickCall\\Quickcall.tga", edgeFile="Interface/Tooltips/UI-Tooltip-Border", tile=false, edgeSize=16, insets={left=4,right=4,top=4,bottom=4}})
-QuickCallFrameWSG:SetBackdropColor(1,1,1,0.9)
-
+-- Position & Drag
 local x, y = ClampToScreen(QuickCallDB.posX_WSG, QuickCallDB.posY_WSG, QuickCallFrameWSG:GetWidth(), QuickCallFrameWSG:GetHeight())
 QuickCallFrameWSG:SetPoint("BOTTOMLEFT",UIParent,"BOTTOMLEFT",x,y)
 QuickCallFrameWSG:SetMovable(true)
 QuickCallFrameWSG:RegisterForDrag("LeftButton")
-QuickCallFrameWSG:SetScript("OnDragStart",function()
-    if not QuickCallDB.locked_WSG then QuickCallFrameWSG:StartMoving() end
-end)
+QuickCallFrameWSG:SetScript("OnDragStart",function() if not QuickCallDB.locked_WSG then QuickCallFrameWSG:StartMoving() end end)
 QuickCallFrameWSG:SetScript("OnDragStop",function()
     QuickCallFrameWSG:StopMovingOrSizing()
     local _, _, _, x, y = QuickCallFrameWSG:GetPoint()
@@ -272,79 +231,98 @@ QuickCallFrameWSG:SetScript("OnDragStop",function()
     QuickCallDB.posY_WSG = y
 end)
 
+-- Titel
 local titleWSG = QuickCallFrameWSG:CreateFontString(nil,"OVERLAY","GameFontNormal")
 titleWSG:SetPoint("TOP",QuickCallFrameWSG,"TOP",0,-12)
-titleWSG:SetText("Call enemy Flag Carrier")
+titleWSG:SetText("")
 titleWSG:SetTextColor(1,1,0)
 titleWSG:SetFont("Fonts\\ARIALN.TTF",15, "OUTLINE")
 
---==================== WSG Buttons ====================
-local framePaddingX_WSG = 20
-local row = 0
-local currentRowCount = 0
-local rowButtonsVisible = {}
+local btnSize = 12
 
-for i=1, table.getn(wsgTexts) do
-    local btn = CreateFrame("Button", QuickCallFrameWSG:GetName().."Button"..i, QuickCallFrameWSG, "UIPanelButtonTemplate")
-    btn:SetWidth(buttonWidth_WSG)
-    btn:SetHeight(buttonHeight_WSG)
-    if wsgTexts[i] ~= "" then
-        btn:SetText(wsgTexts[i])
-        local fs = _G[btn:GetName().."Text"]
-        fs:SetFont("Fonts\\ARIALN.TTF",10.5, "OUTLINE")
-        if i <=6 then fs:SetTextColor(0,1,0)
-        elseif i <=9 then fs:SetTextColor(0.4,0.6,1)
-        else fs:SetTextColor(1,1,0) end
-        btn:SetScript("OnClick", (function(idx) return function() 
+-- Relative Positionen (0-1) statt feste Pixel
+local buttonPositions = {
+    [1] = {x = 101.3/220,  y = -28/220},  -- Flag Room Alliance
+    [2] = {x = 106.5/220, y = -78/220},  -- Tunnel Alliance
+    [3] = {x = 78/220, y = -60/220},  -- Graveyard Alliance
+    [4] = {x = 122/220,  y = -35/220},  -- Banana/Roof Alliance
+    [5] = {x = 120/220, y = -60/220},  -- Ramp Alliance
+    [6] = {x = 80/220,  y = -110/220},  -- West
+    [7] = {x = 110/220,  y = -110/220},  -- Mid
+    [8] = {x = 140/220, y = -110/220},  -- East
+    [9] = {x = 115/220, y = -193.5/220}, -- Flag Room Horde
+    [10] = {x = 106.5/220, y = -140/220},  -- Tunnel Horde
+    [11] = {x = 132/220, y = -160.4/220},  -- Graveyard Horde
+    [12] = {x = 97/220, y = -187/220}, -- Banana/Roof Horde
+    [13] = {x = 84/220, y = -160/220},  -- Ramp Horde
+}
+
+for i=1,table.getn(wsgChatTexts) do
+    local btn = CreateFrame("Button", QuickCallFrameWSG:GetName().."Button"..i, QuickCallFrameWSG)
+    btn:SetWidth(btnSize)
+    btn:SetHeight(btnSize)
+    btn:EnableMouse(true)
+
+    -- Runde Textur
+    btn.texture = btn:CreateTexture(nil, "ARTWORK")
+    btn.texture:SetTexture("Interface\\AddOns\\QuickCall\\circleR.tga")
+    btn.texture:SetAllPoints()
+    btn.texture:SetAlpha(1)
+
+    -- Highlight Textur für Mouseover
+    btn.highlight = btn:CreateTexture(nil, "HIGHLIGHT")
+    btn.highlight:SetAllPoints()
+    btn.highlight:SetTexture("Interface\\AddOns\\QuickCall\\circleG.tga")
+    btn.highlight:SetVertexColor(0,1,0,0.6)
+
+    -- Proportionale Position
+    local pos = buttonPositions[i] or {x = 0.05, y = -0.15} 
+    btn:SetPoint("TOPLEFT", QuickCallFrameWSG, "TOPLEFT",
+        pos.x * QuickCallFrameWSG:GetWidth(),
+        pos.y * QuickCallFrameWSG:GetHeight()
+    )
+
+    -- Klickfunktion MUSS innerhalb der Schleife sein
+    btn:SetScript("OnClick", (function(idx)
+        return function()
             if GetRealZoneText() ~= "Warsong Gulch" then
                 DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r |cffff0000You are not in Warsong Gulch!|r")
             else
-                SendChatMessage(wsgChatTexts[idx],"BATTLEGROUND")
+                SendChatMessage(wsgChatTexts[idx], "BATTLEGROUND")
             end
-        end end)(i))
-        table.insert(rowButtonsVisible, btn)
-    else
-        btn:Hide()
-    end
-    currentRowCount = currentRowCount +1
-    if currentRowCount >= wsgButtonsPerRow then
-        local totalWidth = table.getn(rowButtonsVisible)*buttonWidth_WSG + (table.getn(rowButtonsVisible)-1)*spacing_WSG
-        for j=1,table.getn(rowButtonsVisible) do
-            local x = (QuickCallFrameWSG:GetWidth()-totalWidth)/2 + (j-1)*(buttonWidth_WSG+spacing_WSG)
-            local y = -30 - row*(buttonHeight_WSG+spacing_WSG)
-            rowButtonsVisible[j]:SetPoint("TOPLEFT", QuickCallFrameWSG, "TOPLEFT", x, y)
         end
-        row = row +1
-        currentRowCount = 0
-        rowButtonsVisible = {}
-    end
-end
-if table.getn(rowButtonsVisible) >0 then
-    local totalWidth = table.getn(rowButtonsVisible)*buttonWidth_WSG + (table.getn(rowButtonsVisible)-1)*spacing_WSG
-    for j=1,table.getn(rowButtonsVisible) do
-        local x = (QuickCallFrameWSG:GetWidth()-totalWidth)/2 + (j-1)*(buttonWidth_WSG+spacing_WSG)
-        local y = -30 - row*(buttonHeight_WSG+spacing_WSG)
-        rowButtonsVisible[j]:SetPoint("TOPLEFT", QuickCallFrameWSG, "TOPLEFT", x, y)
-    end
+    end)(i))
 end
 
--- Lock button WSG
+-- Lock Button am unteren Rand
 local lockBtnWSG = CreateFrame("Button",QuickCallFrameWSG:GetName().."LockToggle",QuickCallFrameWSG,"UIPanelButtonTemplate")
 lockBtnWSG:SetWidth(60)
 lockBtnWSG:SetHeight(20)
 lockBtnWSG:SetText(QuickCallDB.locked_WSG and "Unlock" or "Lock")
-lockBtnWSG:SetPoint("BOTTOM",QuickCallFrameWSG,"BOTTOM",0,8)
+lockBtnWSG:SetPoint("BOTTOM",QuickCallFrameWSG,"BOTTOM",80,8)
 lockBtnWSG:SetScript("OnClick",function() ToggleLock(QuickCallFrameWSG,false) end)
 lockBtnWSG:SetFont("Fonts\\ARIALN.TTF",10, "OUTLINE")
 
 QuickCallFrameWSG:Hide()
 
--- ==================== Visibility handler ====================
+-- Slash Command für Maus-Debug am WSG-Frame
+SLASH_WSGDEBUG1 = "/debug"
+SlashCmdList["WSGDEBUG"] = function()
+    local x, y = GetCursorPosition()       -- Bildschirmkoordinaten
+    local scale = UIParent:GetEffectiveScale()
+    x = x / scale
+    y = y / scale
+    local fx, fy = QuickCallFrameWSG:GetLeft(), QuickCallFrameWSG:GetBottom()
+    local relX, relY = x - fx, y - fy
+    DEFAULT_CHAT_FRAME:AddMessage(string.format("Mouse relative to WSG frame: %.1f / %.1f", relX, relY))
+end
+
+
+-- Visibility handler
 local function UpdateVisibility()
     local zoneName = GetRealZoneText()
     QuickCallFrameAB:Hide()
     QuickCallFrameWSG:Hide()
-    
     if zoneName=="Arathi Basin" and QuickCallDB.enabled_AB then
         QuickCallFrameAB:Show()
     elseif zoneName=="Warsong Gulch" and QuickCallDB.enabled_WSG then
@@ -357,7 +335,7 @@ visEventFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 visEventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 visEventFrame:SetScript("OnEvent",UpdateVisibility)
 
--- ==================== Auto-update lastKnownBase on zone events ====================
+-- Update lastKnownBase on zone events
 local function UpdateLastKnownBase()
     local zone = GetRealZoneText()
     local base = GetMinimapZoneText()
@@ -374,40 +352,29 @@ baseEventFrame:SetScript("OnEvent", UpdateLastKnownBase)
 
 -- ==================== Slash Commands ====================
 SLASH_QUICKCALL1 = "/qca"
-SlashCmdList["QUICKCALL"] = function()
-    if QuickCallFrameAB:IsShown() then QuickCallFrameAB:Hide() else QuickCallFrameAB:Show() end
-end
+SlashCmdList["QUICKCALL"] = function() if QuickCallFrameAB:IsShown() then QuickCallFrameAB:Hide() else QuickCallFrameAB:Show() end end
 
 SLASH_QUICKCALLWSG1 = "/qcw"
-SlashCmdList["QUICKCALLWSG"] = function()
-    if QuickCallFrameWSG:IsShown() then QuickCallFrameWSG:Hide() else QuickCallFrameWSG:Show() end
-end
+SlashCmdList["QUICKCALLWSG"] = function() if QuickCallFrameWSG:IsShown() then QuickCallFrameWSG:Hide() else QuickCallFrameWSG:Show() end end
 
 SLASH_QUICKCALLALL1 = "/qc"
 SlashCmdList["QUICKCALLALL"] = function()
     local anyShown = QuickCallFrameAB:IsShown() or QuickCallFrameWSG:IsShown()
-    if anyShown then
-        QuickCallFrameAB:Hide()
-        QuickCallFrameWSG:Hide()
-    else
-        QuickCallFrameAB:Show()
-        QuickCallFrameWSG:Show()
-    end
+    if anyShown then QuickCallFrameAB:Hide() QuickCallFrameWSG:Hide() else QuickCallFrameAB:Show() QuickCallFrameWSG:Show() end
 end
 
 SLASH_QCSHORT1 = "/qcshort"
 SlashCmdList["QCSHORT"] = function()
     QuickCallDB.useShortNames = true
-    DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r Using |cff00ff00SHORT|r base names (LM, BS, GM, FM, ST).")
+    DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r Using |cff00ff00SHORT|r base names.")
 end
 
 SLASH_QCLONG1 = "/qclong"
 SlashCmdList["QCLONG"] = function()
     QuickCallDB.useShortNames = false
-    DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r Using |cffffff00LONG|r base names (Lumber Mill, Blacksmith, Gold Mine, Farm, Stables).")
+    DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffQuickCall:|r Using |cffffff00LONG|r base names.")
 end
 
--- ==================== Toggle Slash Commands ====================
 SLASH_QCATOGGLE1 = "/qcatoggle"
 SlashCmdList["QCATOGGLE"] = function()
     QuickCallDB.enabled_AB = not QuickCallDB.enabled_AB
