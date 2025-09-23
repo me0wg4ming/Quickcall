@@ -1,4 +1,4 @@
-# Quickcall v2.1
+# Quickcall v2.2
 
 New toggle for Warsong and AB (turning the visual frames off)
 
