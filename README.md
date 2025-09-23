@@ -33,4 +33,5 @@ Added a new command to toggle long or short calls
 
 <img width="215" height="229" alt="grafik" src="https://github.com/user-attachments/assets/7f586b0a-15ce-43d3-9ece-14fed156c6b3" />
 
-<img width="289" height="279" alt="grafik" src="https://github.com/user-attachments/assets/7abd23ed-164c-4edd-ae2f-5405b4c18d19" />
+<img width="302" height="301" alt="grafik" src="https://github.com/user-attachments/assets/89d1f898-2808-4bf6-a3d0-3be9799134f8" />
+
