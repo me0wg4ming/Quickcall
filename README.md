@@ -2,9 +2,9 @@
 
 New toggle for Warsong and AB (turning the visual frames off)
 
-/qcwtoggle - toggle warsong frame off for warsong after joining
+/qcwtoggle - toggle to turn warsong frame permanently off after entering the battleground
 
-/qcatoggle - toggle arathi basin frame off (hotkeys will still work)
+/qcatoggle - toggle to turn arathi basin frame permanently off  after entering the battleground (hotkeys will still work)
 
 ----------------------------------------------------------------------------------------
 
@@ -21,9 +21,9 @@ The addon automatically shows when entering Arathi Basin or Warsong.
 
 You can also manually make both frames shown with the command "/quickcall" or "/qc"
 
-/qca - Will only show Arathi Basin frame.
+/qca - Will only show Arathi Basin frame.(outside of a battleground)
 
-/qcw - Will only show Warsong frame.
+/qcw - Will only show Warsong frame. (outside of a battleground)
 
 Added a new command to toggle long or short calls
 
